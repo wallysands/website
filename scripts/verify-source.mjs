@@ -33,6 +33,12 @@ const expectedProjectAssets = [
   "public/projects/jello-jump/jump-stretch-squash.png",
   "public/projects/jello-jump/diagonal-stretching.png",
   "public/projects/jello-jump/wall-impact.png",
+  "public/projects/tournament-searcher/graph-11.jpg",
+  "public/projects/tournament-searcher/graph-20.jpg",
+  "public/projects/tournament-searcher/graph-24.jpg",
+  "public/projects/tournament-searcher/graph-28.jpg",
+  "public/projects/ray-tracer/spheres1-result.png",
+  "public/projects/ray-tracer/spheres2-result.png",
 ];
 
 function literalFromCodes(codes) {
@@ -190,7 +196,21 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
     if (!existsSync(join(workspaceRoot, contentFile))) failures.push(`Missing ${contentFile}`);
   }
 
-  for (const requiredText of ["Still Lifes", "Outdoor / Plein Air", "Selected projects", "Jello Jump", "squash and stretch", "Affine transformation sketches"]) {
+  for (const requiredText of [
+    "Still Lifes",
+    "Outdoor / Plein Air",
+    "Selected projects",
+    "Jello Jump",
+    "squash and stretch",
+    "Affine transformation sketches",
+    "Ray Tracer",
+    "recursive reflection and refraction",
+    "OpenMP",
+    "2-Handicap Tournament Searcher",
+    "recursive backtracking",
+    "symmetric tournament",
+    "https://github.com/wallysands/TournamentSearch",
+  ]) {
     if (!allText.includes(requiredText)) failures.push(`Missing content phrase: ${requiredText}`);
   }
 

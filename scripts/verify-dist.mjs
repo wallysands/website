@@ -10,6 +10,8 @@ const requiredPages = [
   "art/index.html",
   "projects/index.html",
   "projects/jello-jump/index.html",
+  "projects/ray-tracer/index.html",
+  "projects/two-handicap-tournament-searcher/index.html",
   "about/index.html",
 ];
 
@@ -76,7 +78,15 @@ const requiredTextByPage = {
     "gallery-masonry",
     "art-lightbox",
   ],
-  "projects/index.html": ["Selected projects", "Jello Jump", "OpenGL"],
+  "projects/index.html": [
+    "Selected projects",
+    "Jello Jump",
+    "Ray Tracer",
+    "2-Handicap Tournament Searcher",
+    "OpenGL",
+    "OpenMP",
+    "Python",
+  ],
   "projects/jello-jump/index.html": [
     "Jello Jump",
     "squash and stretch",
@@ -91,11 +101,33 @@ const requiredTextByPage = {
     "/website/projects/jello-jump/diagonal-stretching.png",
     "/website/projects/jello-jump/wall-impact.png",
   ],
+  "projects/ray-tracer/index.html": [
+    "Ray Tracer",
+    "recursive reflection and refraction",
+    "sphere and triangle intersections",
+    "spot lights",
+    "OpenMP",
+    "/website/projects/ray-tracer/spheres1-result.png",
+    "/website/projects/ray-tracer/spheres2-result.png",
+  ],
+  "projects/two-handicap-tournament-searcher/index.html": [
+    "2-Handicap Tournament Searcher",
+    "recursive backtracking",
+    "symmetric tournament",
+    "TournamentSearch",
+    "https://github.com/wallysands/TournamentSearch",
+    "/website/projects/tournament-searcher/graph-11.jpg",
+    "/website/projects/tournament-searcher/graph-20.jpg",
+    "/website/projects/tournament-searcher/graph-24.jpg",
+    "/website/projects/tournament-searcher/graph-28.jpg",
+  ],
 };
 const forbiddenTextByPage = {
   "experience/index.html": ["Drawing in the Flow", "<h2>Skills</h2>", "skill-grid", "Used:"],
   "projects/index.html": ["notion.com"],
   "projects/jello-jump/index.html": ["notion.com", "A tile map loaded from", "jello-jump-walkthrough.mp4", "affine-vertical.png", "affine-diagonal.png", "affine-wall-impact.png"],
+  "projects/ray-tracer/index.html": ["notion.com", "wsl.localhost", "raytraced.png"],
+  "projects/two-handicap-tournament-searcher/index.html": ["notion.com", "wsl.localhost"],
 };
 const requiredArtImages = [
   "/website/art/stilllife/beach-gear.jpg",
