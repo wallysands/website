@@ -391,6 +391,20 @@ p {
   box-shadow: var(--shadow);
 }
 
+.publication-figure {
+  margin: 0 0 22px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #111;
+  border-radius: 8px;
+}
+
+.publication-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .skill-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import { withBase } from "../lib/urls";
+---
+
+<BaseLayout title="Publications | Walter Sands">
+  <PageHeader
+    eyebrow="Publications"
+    title="Published research in visualization and mixed reality."
+    intro="Selected academic publications and research outputs."
+  />
+
+  <section class="section">
+    <article class="callout">
+      <figure class="publication-figure">
+        <img
+          src={withBase("/publications/drawing-in-the-flow-teaser.png")}
+          alt="Teaser collage for Drawing in the Flow showing VR sketching and illustrative 3D flow visualization results."
+          loading="lazy"
+        />
+      </figure>
+      <h2>Drawing in the Flow: A Data-Aware Mixed-Reality Sketching Interface for Illustrative 3D Flow Visualization</h2>
+      <p>Short paper published at IEEE VIS 2025 using a sketch-based interface to author scientific visualizations of 3D fluid flow data.</p>
+      <p class="tools">DOI: 10.1109/VIS60296.2025.00067</p>
+    </article>
+  </section>
+</BaseLayout>

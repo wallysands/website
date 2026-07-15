@@ -24,6 +24,9 @@ const expectedFullArtAssets = [
   "public/art/full/outdoor/backyard2.jpg",
   "public/art/full/outdoor/path.jpg",
 ];
+const expectedPublicationAssets = [
+  "public/publications/drawing-in-the-flow-teaser.png",
+];
 
 function literalFromCodes(codes) {
   return String.fromCharCode(...codes);
@@ -154,7 +157,7 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
     if (!siteText.includes(requiredLinkedIn)) {
       failures.push("Missing required LinkedIn profile URL in src/data/site.ts");
     }
-    for (const label of ["Home", "Experience", "Art", "Projects", "About", "LinkedIn"]) {
+    for (const label of ["Home", "Experience", "Publications", "Art", "Projects", "About", "LinkedIn"]) {
       if (!siteText.includes(label)) failures.push(`Missing nav label: ${label}`);
     }
   }
@@ -164,6 +167,7 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
     "src/components/SiteNav.astro",
     "src/components/PageHeader.astro",
     "src/components/FeatureCard.astro",
+    "src/pages/publications.astro",
     "src/styles/global.css",
   ];
   for (const requiredFile of requiredFiles) {
@@ -197,6 +201,10 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
         failures.push(`Full-resolution art asset has non-normal EXIF orientation ${orientation}: ${asset}`);
       }
     }
+  }
+
+  for (const asset of expectedPublicationAssets) {
+    if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing publication asset: ${asset}`);
   }
 
   const artContentDir = join(workspaceRoot, "src/content/art");

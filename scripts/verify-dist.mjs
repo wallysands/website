@@ -6,6 +6,7 @@ const root = process.cwd();
 const requiredPages = [
   "index.html",
   "experience/index.html",
+  "publications/index.html",
   "art/index.html",
   "projects/index.html",
   "projects/selected-projects/index.html",
@@ -53,8 +54,16 @@ const deployedBase = "/website/";
 const baseWithoutLeadingSlash = deployedBase.replace(/^\//, "");
 const rootInternalHrefPattern = new RegExp(`href="/(?!(?:${escapedLiteral(baseWithoutLeadingSlash)}|#|$))[^"]*"`, "g");
 const requiredTextByPage = {
-  "index.html": ["Walter Sands", "Experience", "Art", "Projects", "About", "LinkedIn"],
-  "experience/index.html": ["Drawing in the Flow", "Interactive Visualization Lab"],
+  "index.html": ["Walter Sands", "Experience", "Publications", "Art", "Projects", "About", "LinkedIn"],
+  "experience/index.html": [
+    "Interactive Visualization Lab",
+    "section-jump-nav",
+    'href="#education"',
+    'href="#industry-experience"',
+    "Education",
+    "Industry Experience",
+  ],
+  "publications/index.html": ["Publications", "Drawing in the Flow", "IEEE VIS 2025", "10.1109/VIS60296.2025.00067"],
   "art/index.html": [
     "Artistic Studies",
     "section-jump-nav",
@@ -69,6 +78,9 @@ const requiredTextByPage = {
   ],
   "projects/index.html": ["Selected Projects"],
   "projects/selected-projects/index.html": ["Selected Projects", "intentionally ready"],
+};
+const forbiddenTextByPage = {
+  "experience/index.html": ["Drawing in the Flow", "<h2>Skills</h2>", "skill-grid"],
 };
 const requiredArtImages = [
   "/website/art/stilllife/beach-gear.jpg",
@@ -87,6 +99,9 @@ const requiredFullArtImages = [
   "/website/art/full/outdoor/backyard.jpg",
   "/website/art/full/outdoor/backyard2.jpg",
   "/website/art/full/outdoor/path.jpg",
+];
+const requiredPublicationImages = [
+  "/website/publications/drawing-in-the-flow-teaser.png",
 ];
 
 function collectFiles(dir) {
@@ -146,6 +161,14 @@ function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
         if (!pageText.includes(text)) failures.push(`Missing required text in ${page}: ${text}`);
       }
     }
+    for (const [page, forbiddenText] of Object.entries(forbiddenTextByPage)) {
+      const pagePath = join(dist, page);
+      if (!existsSync(pagePath)) continue;
+      const pageText = readFileSync(pagePath, "utf8");
+      for (const text of forbiddenText) {
+        if (pageText.includes(text)) failures.push(`Forbidden text in ${page}: ${text}`);
+      }
+    }
     const artHtmlPath = join(dist, "art/index.html");
     if (existsSync(artHtmlPath)) {
       const artHtml = readFileSync(artHtmlPath, "utf8");
@@ -157,6 +180,13 @@ function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
       }
       if (artHtml.includes("Images to be added")) failures.push("Art page still includes placeholder copy");
       if (artHtml.includes("Beach Stuff") || artHtml.includes("beachstuff")) failures.push("Art page still references Beach Stuff");
+    }
+    const publicationsHtmlPath = join(dist, "publications/index.html");
+    if (existsSync(publicationsHtmlPath)) {
+      const publicationsHtml = readFileSync(publicationsHtmlPath, "utf8");
+      for (const image of requiredPublicationImages) {
+        if (!publicationsHtml.includes(image)) failures.push(`Missing publication image in dist: ${image}`);
+      }
     }
   }
   return { failures, files };
