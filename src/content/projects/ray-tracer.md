@@ -25,10 +25,10 @@ OpenMP parallelizes the outer pixel loop so independent rays can be traced acros
 <div class="project-figure-grid project-figure-grid-compact">
   <figure>
     <img src="/website/projects/ray-tracer/spheres1-result.png" alt="Ray traced render from the spheres1 scene file." loading="lazy" />
-    <figcaption>`spheres1.txt`: recursive shading and shadows on a simple sphere scene.</figcaption>
+    <figcaption><code>spheres1.txt</code>: recursive shading and shadows on a simple sphere scene.</figcaption>
   </figure>
   <figure>
     <img src="/website/projects/ray-tracer/spheres2-result.png" alt="Ray traced render from the spheres2 scene file." loading="lazy" />
-    <figcaption>`spheres2.txt`: additional geometry and reflective material behavior.</figcaption>
+    <figcaption><code>spheres2.txt</code>: additional geometry and reflective material behavior.</figcaption>
   </figure>
 </div>
