@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+const projects = await getCollection("projects");
+---
+
+<BaseLayout title="Projects | Walter Sands">
+  <PageHeader
+    eyebrow="Projects"
+    title="Selected projects will live here."
+    intro="This page is ready for technical and creative project writeups once the final set is chosen."
+  />
+  <section class="section project-list">
+    {
+      projects.map((project) => (
+        <article class="callout">
+          <h2><a href={`/projects/${project.id.replace(/\.md$/, "")}/`}>{project.data.title}</a></h2>
+          <p>{project.data.summary}</p>
+          <p class="tools">{project.data.status === "planned" ? "Project details to be added" : project.data.tools.join(", ")}</p>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>

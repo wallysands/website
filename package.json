@@ -1,0 +1,20 @@
+{
+  "name": "walter-sands-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "verify:source": "node scripts/verify-source.mjs",
+    "verify:dist": "node scripts/verify-dist.mjs",
+    "verify": "pnpm verify:source && pnpm build && pnpm verify:dist"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^5.0.0",
+    "typescript": "^5.6.0"
+  },
+  "devDependencies": {}
+}

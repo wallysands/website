@@ -1,0 +1,22 @@
+---
+import { site } from "../data/site";
+---
+
+<header class="site-nav" aria-label="Site header">
+  <a class="brand" href="/" aria-label="Walter Sands home">
+    <span class="brand-mark">WS</span>
+    <span>Walter Sands</span>
+  </a>
+  <nav aria-label="Main navigation">
+    {
+      site.nav.map((item) => {
+        const external = "external" in item && item.external;
+        return (
+          <a href={item.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+            {item.label}
+          </a>
+        );
+      })
+    }
+  </nav>
+</header>

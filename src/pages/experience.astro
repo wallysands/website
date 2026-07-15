@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import TimelineItem from "../components/TimelineItem.astro";
+---
+
+<BaseLayout title="Experience | Walter Sands">
+  <PageHeader
+    eyebrow="Experience"
+    title="Research, software, data, and visualization."
+    intro="A web-native summary of academic work, publication, industry roles, and technical skills."
+  />
+
+  <section class="section">
+    <h2>Current Focus</h2>
+    <p>
+      Walter is pursuing a PhD in Computer Science at the University of Minnesota and researching as part of the
+      Interactive Visualization Lab. His current work spans mixed reality, VR, scientific visualization, and a robotics
+      collaboration focused on enabling a VR headset user to work alongside a robot in the same room.
+    </p>
+    <p class="tools">Used: Unity, C#, ROS2, Docker</p>
+  </section>
+
+  <section class="section stack">
+    <h2>Education</h2>
+    <TimelineItem title="PhD Computer Science" org="University of Minnesota" date="2025-current" details={["Research in the Interactive Visualization Lab.", "Coursework includes Computer Graphics, Intelligent MR Systems, and Game Engine Architecture."]} />
+    <TimelineItem title="M.S. Data Science" org="University of Minnesota" date="Completed 2025" details={["Capstone used VR to create a sketch-based interface for visualizing and interacting with fluid flow simulations.", "Coursework included 3D Drawing in eXtended Reality, Virtual Reality and 3D Interaction, Computer Vision, Deep Learning, and Applied Regression Analysis."]} tools="Unity, C#, ParaView" />
+    <TimelineItem title="B.S. Computer Science, Mathematics minor" org="University of Minnesota Duluth" date="Completed 2019" details={["Undergraduate study in computer science with a mathematics minor."]} />
+  </section>
+
+  <section class="section">
+    <h2>Publication</h2>
+    <article class="callout">
+      <h3>Drawing in the Flow: A Data-Aware Mixed-Reality Sketching Interface for Illustrative 3D Flow Visualization</h3>
+      <p>Short paper published at IEEE VIS 2025 using a sketch-based interface to author scientific visualizations of 3D fluid flow data.</p>
+      <p class="tools">DOI: 10.1109/VIS60296.2025.00067</p>
+    </article>
+  </section>
+
+  <section class="section stack">
+    <h2>Industry Experience</h2>
+    <TimelineItem title="Associate Consultant" org="Daugherty Business Solutions, Minneapolis, MN" date="February 2022-August 2023" details={["Supported data science teams working on anomaly detection, model assessment, production data preparation, and internal software projects.", "Developed a cloud native serverless API with AWS API Gateway and Lambda, deployed with Terraform.", "Converted a project from Perl to Python and abstracted database connection/query methods for multiple environments."]} tools="Python, SQL/BigQuery, Airflow, GCP, Scala, AWS, Postgres, Terraform" />
+    <TimelineItem title="Data Engineer" org="phData, Minneapolis, MN" date="March 2020-May 2021" details={["Collaborated with onshore and offshore team members to provide 24-hour client support for clusters and ETL pipelines.", "Automated cluster resource monitoring and notifications, improved testing/support processes, and conducted knowledge transfers."]} tools="Python, Bash, HiveSQL, Airflow, Hadoop, NodeJS" />
+    <TimelineItem title="Software Developer" org="Output Technology Inc., Brooklyn Park, MN" date="June 2016-August 2019" details={["Created and maintained warehouse efficiency and usage logging programs.", "Developed a modular framework for deploying only the components needed at a specific location."]} tools="C++, MySQL" />
+  </section>
+
+  <section class="section">
+    <h2>Skills</h2>
+    <div class="skill-grid">
+      <p><strong>Languages</strong><br />Python, C#, SQL, C++/C, Bash</p>
+      <p><strong>Software/tools</strong><br />Visual Studio Code, Unity3D, NumPy, Pandas, PyTest, Git, ROS2, Docker, Airflow</p>
+      <p><strong>Databases</strong><br />BigQuery, Postgres, Hive, MySQL</p>
+      <p><strong>Cloud</strong><br />GCP, AWS</p>
+      <p><strong>Operating systems</strong><br />Windows, Linux, Mac</p>
+    </div>
+  </section>
+</BaseLayout>

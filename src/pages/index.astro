@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FeatureCard from "../components/FeatureCard.astro";
+---
+
+<BaseLayout>
+  <section class="hero">
+    <p class="eyebrow">Portfolio</p>
+    <h1>Computer science, visualization, and observational art.</h1>
+    <p>
+      Walter Sands is a computer science PhD student at the University of Minnesota working across mixed reality,
+      scientific visualization, software systems, and data. This site gathers research, industry experience, artwork,
+      and projects in one place.
+    </p>
+  </section>
+
+  <section class="grid" aria-label="Portfolio sections">
+    <FeatureCard title="Experience" href="/experience/" meta="Research and practice" summary="PhD research, education, publication, industry roles, and technical skills." />
+    <FeatureCard title="Art" href="/art/" meta="Still life and plein air" summary="A home for still lifes and outdoor painting collections as images are selected." />
+    <FeatureCard title="Projects" href="/projects/" meta="Selected work" summary="A structured space for future technical and creative project writeups." />
+  </section>
+
+  <section class="section current-focus">
+    <h2>Current focus</h2>
+    <p>
+      Research in the Interactive Visualization Lab explores mixed reality interfaces for scientific visualization and
+      collaboration, including systems where a VR headset user can work alongside a robot in the same room.
+    </p>
+  </section>
+</BaseLayout>

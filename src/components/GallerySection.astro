@@ -1,0 +1,50 @@
+---
+interface GalleryEntry {
+  data: {
+    title: string;
+    year?: number;
+    medium?: string;
+    image?: string;
+    status: string;
+    category: string;
+    description?: string;
+  };
+}
+
+interface Props {
+  title: string;
+  summary: string;
+  entries: GalleryEntry[];
+}
+
+const { title, summary, entries } = Astro.props;
+---
+
+<section class="section gallery-section">
+  <div class="section-heading">
+    <h2>{title}</h2>
+    <p>{summary}</p>
+  </div>
+  <div class="gallery-grid">
+    {
+      entries.map((entry) => (
+        <article class="gallery-item">
+          {entry.data.status === "available" && entry.data.image ? (
+            <img
+              class="art-image"
+              src={entry.data.image}
+              alt={[entry.data.title, entry.data.year, entry.data.medium].filter(Boolean).join(", ")}
+            />
+          ) : (
+            <div class="art-frame" aria-hidden="true"></div>
+          )}
+          <div>
+            <h3>{entry.data.title}</h3>
+            <p>{entry.data.description}</p>
+            <span>{entry.data.status === "planned" ? "Images to be added" : [entry.data.year, entry.data.medium].filter(Boolean).join(" · ")}</span>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

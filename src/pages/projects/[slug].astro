@@ -1,0 +1,40 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id.replace(/\.md$/, "") },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { image, links, status, tools, year } = project.data;
+---
+
+<BaseLayout title={`${project.data.title} | Walter Sands`}>
+  <PageHeader eyebrow="Project" title={project.data.title} intro={project.data.summary} />
+  <section class="section project-detail">
+    {image && <img class="project-image" src={image} alt={project.data.title} />}
+    {(year || tools.length > 0) && (
+      <p class="tools">{[year, tools.length > 0 ? tools.join(", ") : undefined].filter(Boolean).join(" | ")}</p>
+    )}
+    <h2>Project details</h2>
+    <div class="project-content"><Content /></div>
+    {links.length > 0 && (
+      <p class="project-links">
+        {links.map((link) => <a href={link.href}>{link.label}</a>)}
+      </p>
+    )}
+    {status === "planned" && <p class="project-status">This project entry is intentionally ready for its final writeup.</p>}
+  </section>
+</BaseLayout>
+

@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  org: string;
+  date: string;
+  details: string[];
+  tools?: string;
+}
+
+const { title, org, date, details, tools } = Astro.props;
+---
+
+<article class="timeline-item">
+  <div>
+    <p class="eyebrow">{date}</p>
+    <h3>{title}</h3>
+    <p class="org">{org}</p>
+  </div>
+  <div>
+    <ul>
+      {details.map((detail) => <li>{detail}</li>)}
+    </ul>
+    {tools && <p class="tools">Used: {tools}</p>}
+  </div>
+</article>
