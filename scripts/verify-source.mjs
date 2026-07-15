@@ -27,6 +27,13 @@ const expectedFullArtAssets = [
 const expectedPublicationAssets = [
   "public/publications/drawing-in-the-flow-teaser.png",
 ];
+const expectedProjectAssets = [
+  "public/projects/jello-jump/player-texture.jpg",
+  "public/projects/jello-jump/game-with-audio-and-closer-camera.mp4",
+  "public/projects/jello-jump/jump-stretch-squash.png",
+  "public/projects/jello-jump/diagonal-stretching.png",
+  "public/projects/jello-jump/wall-impact.png",
+];
 
 function literalFromCodes(codes) {
   return String.fromCharCode(...codes);
@@ -176,14 +183,14 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
 
   const contentFiles = [
     "src/content.config.ts",
-    "src/content/projects/selected-projects.md",
+    "src/content/projects/jello-jump.md",
     "src/components/GallerySection.astro",
   ];
   for (const contentFile of contentFiles) {
     if (!existsSync(join(workspaceRoot, contentFile))) failures.push(`Missing ${contentFile}`);
   }
 
-  for (const requiredText of ["Still Lifes", "Outdoor / Plein Air", "selected projects"]) {
+  for (const requiredText of ["Still Lifes", "Outdoor / Plein Air", "Selected projects", "Jello Jump", "squash and stretch", "Affine transformation sketches"]) {
     if (!allText.includes(requiredText)) failures.push(`Missing content phrase: ${requiredText}`);
   }
 
@@ -205,6 +212,22 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
 
   for (const asset of expectedPublicationAssets) {
     if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing publication asset: ${asset}`);
+  }
+
+  for (const asset of expectedProjectAssets) {
+    if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing project asset: ${asset}`);
+  }
+
+  const publicSiteText = existingFiles
+    .filter((file) => /[\\/]src[\\/](content|pages|components|layouts|data|styles)[\\/]/.test(file))
+    .map((file) => readFileSync(file, "utf8"))
+    .join("\n");
+  if (/notion\.com/i.test(publicSiteText)) failures.push("Project source must not link to Notion");
+  if (publicSiteText.includes("A tile map loaded from `maps/sample.txt`, with start and goal markers.")) {
+    failures.push("Jello Jump page still includes the removed map bullet");
+  }
+  if (!publicSiteText.includes("max-width: 50%;")) {
+    failures.push("Jello Jump affine figures should render at about half width on desktop");
   }
 
   const artContentDir = join(workspaceRoot, "src/content/art");

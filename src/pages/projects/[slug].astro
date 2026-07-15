@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHeader from "../../components/PageHeader.astro";
+import { withBase } from "../../lib/urls";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -17,13 +18,22 @@ interface Props {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const { image, links, status, tools, year } = project.data;
+const { image, links, status, tools, video, year } = project.data;
 ---
 
 <BaseLayout title={`${project.data.title} | Walter Sands`}>
   <PageHeader eyebrow="Project" title={project.data.title} intro={project.data.summary} />
   <section class="section project-detail">
-    {image && <img class="project-image" src={image} alt={project.data.title} />}
+    {video ? (
+      <figure class="project-video-figure">
+        <video class="project-video" controls preload="metadata" poster={video.poster ? withBase(video.poster) : undefined}>
+          <source src={withBase(video.src)} type="video/mp4" />
+        </video>
+        {video.caption && <figcaption>{video.caption}</figcaption>}
+      </figure>
+    ) : (
+      image && <img class="project-image" src={withBase(image)} alt={project.data.title} />
+    )}
     {(year || tools.length > 0) && (
       <p class="tools">{[year, tools.length > 0 ? tools.join(", ") : undefined].filter(Boolean).join(" | ")}</p>
     )}

@@ -9,7 +9,7 @@ const requiredPages = [
   "publications/index.html",
   "art/index.html",
   "projects/index.html",
-  "projects/selected-projects/index.html",
+  "projects/jello-jump/index.html",
   "about/index.html",
 ];
 
@@ -76,11 +76,26 @@ const requiredTextByPage = {
     "gallery-masonry",
     "art-lightbox",
   ],
-  "projects/index.html": ["Selected Projects"],
-  "projects/selected-projects/index.html": ["Selected Projects", "intentionally ready"],
+  "projects/index.html": ["Selected projects", "Jello Jump", "OpenGL"],
+  "projects/jello-jump/index.html": [
+    "Jello Jump",
+    "squash and stretch",
+    "time-based animation",
+    "OpenGL",
+    "SDL3",
+    "Affine transformation sketches",
+    "<video",
+    "/website/projects/jello-jump/game-with-audio-and-closer-camera.mp4",
+    "/website/projects/jello-jump/player-texture.jpg",
+    "/website/projects/jello-jump/jump-stretch-squash.png",
+    "/website/projects/jello-jump/diagonal-stretching.png",
+    "/website/projects/jello-jump/wall-impact.png",
+  ],
 };
 const forbiddenTextByPage = {
-  "experience/index.html": ["Drawing in the Flow", "<h2>Skills</h2>", "skill-grid"],
+  "experience/index.html": ["Drawing in the Flow", "<h2>Skills</h2>", "skill-grid", "Used:"],
+  "projects/index.html": ["notion.com"],
+  "projects/jello-jump/index.html": ["notion.com", "A tile map loaded from", "jello-jump-walkthrough.mp4", "affine-vertical.png", "affine-diagonal.png", "affine-wall-impact.png"],
 };
 const requiredArtImages = [
   "/website/art/stilllife/beach-gear.jpg",

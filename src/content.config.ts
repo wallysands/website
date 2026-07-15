@@ -25,6 +25,11 @@ const projects = defineCollection({
     links: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
     status: z.enum(["planned", "available"]),
     image: z.string().optional(),
+    video: z.object({
+      src: z.string(),
+      poster: z.string().optional(),
+      caption: z.string().optional(),
+    }).optional(),
   }),
 });
 

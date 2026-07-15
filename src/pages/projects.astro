@@ -10,16 +10,19 @@ const projects = await getCollection("projects");
 <BaseLayout title="Projects | Walter Sands">
   <PageHeader
     eyebrow="Projects"
-    title="Selected projects will live here."
-    intro="This page is ready for technical and creative project writeups once the final set is chosen."
+    title="Selected projects"
+    intro="Technical and creative projects spanning graphics, interaction, visualization, and data work."
   />
   <section class="section project-list">
     {
       projects.map((project) => (
-        <article class="callout">
-          <h2><a href={withBase(`/projects/${project.id.replace(/\.md$/, "")}/`)}>{project.data.title}</a></h2>
-          <p>{project.data.summary}</p>
-          <p class="tools">{project.data.status === "planned" ? "Project details to be added" : project.data.tools.join(", ")}</p>
+        <article class="callout project-card">
+          {project.data.image && <img class="project-thumb" src={withBase(project.data.image)} alt="" loading="lazy" />}
+          <div>
+            <h2><a href={withBase(`/projects/${project.id.replace(/\.md$/, "")}/`)}>{project.data.title}</a></h2>
+            <p>{project.data.summary}</p>
+            <p class="tools">{project.data.status === "planned" ? "Project details to be added" : project.data.tools.join(", ")}</p>
+          </div>
         </article>
       ))
     }

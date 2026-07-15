@@ -413,11 +413,27 @@ p {
 
 .project-list,
 .about-copy {
-  max-width: 780px;
+  max-width: 900px;
 }
 
 .project-detail {
   max-width: 780px;
+}
+
+.project-card {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.project-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
 .project-image {
@@ -426,6 +442,49 @@ p {
   max-height: 520px;
   object-fit: cover;
   border: 1px solid var(--line);
+}
+
+.project-video-figure {
+  margin: 0 0 22px;
+}
+
+.project-video {
+  display: block;
+  width: 100%;
+  background: #111;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.project-video-figure figcaption,
+.project-figure-grid figcaption {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-top: 8px;
+}
+
+.project-figure-grid {
+  display: grid;
+  gap: 18px;
+  margin: 22px 0;
+}
+
+.project-figure-grid figure {
+  width: 100%;
+  max-width: 50%;
+  margin: 0 auto;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.project-figure-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
 .project-content > :first-child {
@@ -454,7 +513,12 @@ p {
   }
 
   .timeline-item,
-  .skill-grid {
+  .skill-grid,
+  .project-card {
     grid-template-columns: 1fr;
+  }
+
+  .project-figure-grid figure {
+    max-width: 100%;
   }
 }
