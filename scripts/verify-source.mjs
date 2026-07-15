@@ -50,6 +50,12 @@ const expectedProjectAssets = [
   "public/projects/jello-jump/jump-stretch-squash.png",
   "public/projects/jello-jump/diagonal-stretching.png",
   "public/projects/jello-jump/wall-impact.png",
+  "public/projects/tournament-searcher/graph-11.jpg",
+  "public/projects/tournament-searcher/graph-20.jpg",
+  "public/projects/tournament-searcher/graph-24.jpg",
+  "public/projects/tournament-searcher/graph-28.jpg",
+  "public/projects/ray-tracer/spheres1-result.png",
+  "public/projects/ray-tracer/spheres2-result.png",
 ];
 
 function literalFromCodes(codes) {
@@ -169,6 +175,10 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
   const failures = [];
   const existingFiles = files.filter((file) => existsSync(file));
   const allText = existingFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+  const publicSiteText = existingFiles
+    .filter((file) => /[\\/]src[\\/](content|pages|components|layouts|data|styles)[\\/]/.test(file))
+    .map((file) => readFileSync(file, "utf8"))
+    .join("\n");
   failures.push(...findForbiddenFailures(allText));
 
   if (!checkStructure) return { failures, files };
@@ -201,14 +211,49 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
   const contentFiles = [
     "src/content.config.ts",
     "src/content/projects/jello-jump.md",
+    "src/content/projects/ray-tracer.md",
+    "src/content/projects/two-handicap-tournament-searcher.md",
     "src/components/GallerySection.astro",
   ];
   for (const contentFile of contentFiles) {
     if (!existsSync(join(workspaceRoot, contentFile))) failures.push(`Missing ${contentFile}`);
   }
 
-  for (const requiredText of ["Still Lifes", "Outdoor / Plein Air", "Random", "Figures", "Selected projects", "Jello Jump", "squash and stretch", "Affine transformation sketches"]) {
-    if (!allText.includes(requiredText)) failures.push(`Missing content phrase: ${requiredText}`);
+  const requiredProjectPhrases = [
+    {
+      file: "src/content/projects/ray-tracer.md",
+      phrases: ["Ray Tracer", "recursive reflection and refraction", "OpenMP"],
+    },
+    {
+      file: "src/content/projects/two-handicap-tournament-searcher.md",
+      phrases: [
+        "2-Handicap Tournament Searcher",
+        "recursive backtracking",
+        "symmetric tournament",
+        "https://github.com/wallysands/TournamentSearch",
+      ],
+    },
+  ];
+  for (const { file, phrases } of requiredProjectPhrases) {
+    const filePath = join(workspaceRoot, file);
+    if (!existsSync(filePath)) continue;
+    const projectText = readFileSync(filePath, "utf8");
+    for (const phrase of phrases) {
+      if (!projectText.includes(phrase)) failures.push(`Missing required phrase in ${file}: ${phrase}`);
+    }
+  }
+
+  for (const requiredText of [
+    "Still Lifes",
+    "Outdoor / Plein Air",
+    "Random",
+    "Figures",
+    "Selected projects",
+    "Jello Jump",
+    "squash and stretch",
+    "Affine transformation sketches",
+  ]) {
+    if (!publicSiteText.includes(requiredText)) failures.push(`Missing content phrase: ${requiredText}`);
   }
 
   for (const asset of expectedArtAssets) {
@@ -239,10 +284,6 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
     if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing project asset: ${asset}`);
   }
 
-  const publicSiteText = existingFiles
-    .filter((file) => /[\\/]src[\\/](content|pages|components|layouts|data|styles)[\\/]/.test(file))
-    .map((file) => readFileSync(file, "utf8"))
-    .join("\n");
   if (/notion\.com/i.test(publicSiteText)) failures.push("Project source must not link to Notion");
   if (publicSiteText.includes("A tile map loaded from `maps/sample.txt`, with start and goal markers.")) {
     failures.push("Jello Jump page still includes the removed map bullet");
@@ -288,6 +329,14 @@ function runSelfTest() {
     writeFileSync(script, phone);
     if (!verifySource(fixtureRoot, { files: [script], checkStructure: false }).failures.length) {
       throw new Error("scripts fixture was not rejected");
+    }
+
+    const rayTracerFile = join(fixtureRoot, "src/content/projects/ray-tracer.md");
+    mkdirSync(join(fixtureRoot, "src/content/projects"), { recursive: true });
+    writeFileSync(rayTracerFile, "Ray Tracer\nOpenMP\n");
+    const rayTracerFailures = verifySource(fixtureRoot, { files: [rayTracerFile] }).failures;
+    if (!rayTracerFailures.includes("Missing required phrase in src/content/projects/ray-tracer.md: recursive reflection and refraction")) {
+      throw new Error("Ray Tracer fixture did not reject a missing project phrase");
     }
   } finally {
     rmSync(fixtureRoot, { recursive: true, force: true });
