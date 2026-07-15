@@ -55,7 +55,18 @@ const rootInternalHrefPattern = new RegExp(`href="/(?!(?:${escapedLiteral(baseWi
 const requiredTextByPage = {
   "index.html": ["Walter Sands", "Experience", "Art", "Projects", "About", "LinkedIn"],
   "experience/index.html": ["Drawing in the Flow", "Interactive Visualization Lab"],
-  "art/index.html": ["Still Lifes", "Outdoor / Plein Air", "Charcoal", "Beach Gear", "gallery-masonry", "art-lightbox"],
+  "art/index.html": [
+    "Artistic Studies",
+    "section-jump-nav",
+    "Still Lifes",
+    "Outdoor / Plein Air",
+    'href="#still-lifes"',
+    'href="#outdoor-plein-air"',
+    "Charcoal",
+    "Beach Gear",
+    "gallery-masonry",
+    "art-lightbox",
+  ],
   "projects/index.html": ["Selected Projects"],
   "projects/selected-projects/index.html": ["Selected Projects", "intentionally ready"],
 };

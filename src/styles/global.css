@@ -154,6 +154,27 @@ p {
   border-top: 1px solid var(--line);
 }
 
+.section-jump-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -10px 0 34px;
+}
+
+.section-jump-nav a {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--accent-dark);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.section-jump-nav a:hover {
+  border-color: var(--accent);
+}
+
 .stack {
   display: grid;
   gap: 18px;
