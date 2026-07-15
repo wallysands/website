@@ -16,7 +16,7 @@ The search represents a tournament as an `n` by `k` matrix of opponents. A recur
 
 Several pruning checks keep the search from trying every possible graph blindly. Completed rows must equal their target weight, partial rows stop early if they already exceed that weight, duplicate opponents are rejected, and opponent rows are checked to make sure their remaining empty slots can still reach the required total.
 
-The general search splits the first team's possible opponent range across multiple worker processes. A second symmetric scheduler searches half of the graph while enforcing a complementary structure, which was useful for tournaments where the number of teams is divisible by four.
+The general search splits the first team's possible opponent range across multiple worker processes. A second symmetric scheduler searches half of the graph while enforcing a complementary structure, which was useful for symmetric tournament families where the number of teams is divisible by four.
 
 The final poster summarized small 2-handicap tournament results, including valid examples for `(11, 4)`, `(13, 6)`, `(14, 6)`, `(15, 4)`, `(15, 6)`, and `(15, 8)`. It also showed symmetric 4-regular examples on 20, 24, and 28 vertices, supporting the broader graph-family discussion.
 
