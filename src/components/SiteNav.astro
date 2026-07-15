@@ -1,9 +1,10 @@
 ---
 import { site } from "../data/site";
+import { withBase } from "../lib/urls";
 ---
 
 <header class="site-nav" aria-label="Site header">
-  <a class="brand" href="/" aria-label="Walter Sands home">
+  <a class="brand" href={withBase("/")} aria-label="Walter Sands home">
     <span class="brand-mark">WS</span>
     <span>Walter Sands</span>
   </a>
@@ -12,7 +13,7 @@ import { site } from "../data/site";
       site.nav.map((item) => {
         const external = "external" in item && item.external;
         return (
-          <a href={item.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+          <a href={withBase(item.href)} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
             {item.label}
           </a>
         );

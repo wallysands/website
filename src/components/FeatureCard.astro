@@ -1,4 +1,6 @@
 ---
+import { withBase } from "../lib/urls";
+
 interface Props {
   title: string;
   href: string;
@@ -9,7 +11,7 @@ interface Props {
 const { title, href, summary, meta } = Astro.props;
 ---
 
-<a class="feature-card" href={href}>
+<a class="feature-card" href={withBase(href)}>
   {meta && <span>{meta}</span>}
   <h2>{title}</h2>
   <p>{summary}</p>

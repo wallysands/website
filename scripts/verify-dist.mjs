@@ -49,6 +49,9 @@ const forbiddenPatterns = [
   { name: "student email", pattern: studentEmailPattern },
   { name: "mailto link", pattern: new RegExp(escapedLiteral(literalFromCodes([109, 97, 105, 108, 116, 111, 58])), "i") },
 ];
+const deployedBase = "/website/";
+const baseWithoutLeadingSlash = deployedBase.replace(/^\//, "");
+const rootInternalHrefPattern = new RegExp(`href="/(?!(?:${escapedLiteral(baseWithoutLeadingSlash)}|#|$))[^"]*"`, "g");
 const requiredTextByPage = {
   "index.html": ["Walter Sands", "Experience", "Art", "Projects", "About", "LinkedIn"],
   "experience/index.html": ["Drawing in the Flow", "Interactive Visualization Lab"],
@@ -85,6 +88,10 @@ function findForbiddenFailures(text) {
     .map((rule) => `Forbidden ${rule.name} found in dist`);
 }
 
+function findRootInternalLinkFailures(html) {
+  return [...html.matchAll(rootInternalHrefPattern)].map((match) => `Root-relative internal link escapes ${deployedBase}: ${match[0]}`);
+}
+
 function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
   const dist = join(workspaceRoot, "dist");
   const failures = [];
@@ -99,6 +106,7 @@ function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
   const normalizedText = files.map((file) => htmlToNormalizedText(readFileSync(file, "utf8"))).join(" ");
   failures.push(...findForbiddenFailures(rawHtml));
   failures.push(...findForbiddenFailures(normalizedText));
+  failures.push(...findRootInternalLinkFailures(rawHtml));
 
   if (checkRequiredPages) {
     for (const [page, requiredText] of Object.entries(requiredTextByPage)) {
@@ -129,6 +137,14 @@ function runSelfTest() {
     writeFileSync(page, [...area, ...prefix, ...line].map((digit) => `<span>${digit}</span>`).join(""));
     if (!verifyDist(fixtureRoot, { checkRequiredPages: false }).failures.length) {
       throw new Error("element-split phone fixture was not rejected");
+    }
+    writeFileSync(page, `<a href="/experience/">Experience</a>`);
+    if (!verifyDist(fixtureRoot, { checkRequiredPages: false }).failures.some((failure) => failure.includes("Root-relative internal link"))) {
+      throw new Error("root-relative internal link fixture was not rejected");
+    }
+    writeFileSync(page, `<a href="${deployedBase}experience/">Experience</a>`);
+    if (verifyDist(fixtureRoot, { checkRequiredPages: false }).failures.length) {
+      throw new Error("base-prefixed internal link fixture was rejected");
     }
   } finally {
     rmSync(fixtureRoot, { recursive: true, force: true });
