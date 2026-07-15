@@ -84,6 +84,54 @@ function trackedSourceFiles(workspaceRoot) {
   return trackedFiles.map((file) => join(workspaceRoot, file));
 }
 
+function readUInt16(buffer, offset, littleEndian) {
+  return littleEndian ? buffer.readUInt16LE(offset) : buffer.readUInt16BE(offset);
+}
+
+function readUInt32(buffer, offset, littleEndian) {
+  return littleEndian ? buffer.readUInt32LE(offset) : buffer.readUInt32BE(offset);
+}
+
+function jpegExifOrientation(file) {
+  const buffer = readFileSync(file);
+  if (buffer.length < 4 || buffer[0] !== 0xff || buffer[1] !== 0xd8) return null;
+
+  let offset = 2;
+  while (offset + 4 < buffer.length) {
+    if (buffer[offset] !== 0xff) return null;
+    const marker = buffer[offset + 1];
+    offset += 2;
+    if (marker === 0xda || marker === 0xd9) return null;
+
+    const segmentLength = buffer.readUInt16BE(offset);
+    const segmentStart = offset + 2;
+    const segmentEnd = offset + segmentLength;
+    if (marker === 0xe1 && buffer.subarray(segmentStart, segmentStart + 6).toString("ascii") === "Exif\0\0") {
+      const tiffStart = segmentStart + 6;
+      const byteOrder = buffer.subarray(tiffStart, tiffStart + 2).toString("ascii");
+      const littleEndian = byteOrder === "II";
+      if (!littleEndian && byteOrder !== "MM") return null;
+
+      const ifdOffset = readUInt32(buffer, tiffStart + 4, littleEndian);
+      const ifdStart = tiffStart + ifdOffset;
+      const entryCount = readUInt16(buffer, ifdStart, littleEndian);
+      for (let index = 0; index < entryCount; index += 1) {
+        const entryStart = ifdStart + 2 + index * 12;
+        const tag = readUInt16(buffer, entryStart, littleEndian);
+        const type = readUInt16(buffer, entryStart + 2, littleEndian);
+        const count = readUInt32(buffer, entryStart + 4, littleEndian);
+        if (tag === 0x0112 && type === 3 && count === 1) {
+          return readUInt16(buffer, entryStart + 8, littleEndian);
+        }
+      }
+      return null;
+    }
+    offset = segmentEnd;
+  }
+
+  return null;
+}
+
 function findForbiddenFailures(text, suffix = "") {
   return forbiddenPatterns
     .filter((rule) => rule.pattern.test(text))
@@ -140,7 +188,15 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
   }
 
   for (const asset of expectedFullArtAssets) {
-    if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing full-resolution art asset: ${asset}`);
+    const assetPath = join(workspaceRoot, asset);
+    if (!existsSync(assetPath)) {
+      failures.push(`Missing full-resolution art asset: ${asset}`);
+    } else {
+      const orientation = jpegExifOrientation(assetPath);
+      if (orientation && orientation !== 1) {
+        failures.push(`Full-resolution art asset has non-normal EXIF orientation ${orientation}: ${asset}`);
+      }
+    }
   }
 
   const artContentDir = join(workspaceRoot, "src/content/art");
