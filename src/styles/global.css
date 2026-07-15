@@ -276,7 +276,8 @@ p {
   margin: 0;
 }
 
-.art-lightbox img {
+.art-lightbox img,
+.art-lightbox video {
   display: block;
   width: 100%;
   max-height: 82vh;

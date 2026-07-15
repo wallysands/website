@@ -9,18 +9,24 @@ const byOrder = (a: CollectionEntry<"art">, b: CollectionEntry<"art">) =>
   (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title);
 const stillLifes = artEntries.filter((entry) => entry.data.category === "still-life").sort(byOrder);
 const pleinAir = artEntries.filter((entry) => entry.data.category === "outdoor-plein-air").sort(byOrder);
+const random = artEntries.filter((entry) => entry.data.category === "random").sort(byOrder);
+const figures = artEntries.filter((entry) => entry.data.category === "figures").sort(byOrder);
 ---
 
 <BaseLayout title="Art | Walter Sands">
   <PageHeader
     eyebrow="Art"
     title="Artistic Studies"
-    intro="Charcoal studies from still life arrangements and outdoor observation."
+    intro="Charcoal, graphite pencil, and 3D digital studies from observation, reference, and imagination."
   />
   <nav class="section-jump-nav" aria-label="Art sections">
     <a href="#still-lifes">Still Lifes</a>
     <a href="#outdoor-plein-air">Outdoor / Plein Air</a>
+    <a href="#random">Random</a>
+    <a href="#figures">Figures</a>
   </nav>
   <GallerySection title="Still Lifes" summary="Paintings and studies built around close looking, arrangement, and light." entries={stillLifes} />
   <GallerySection title="Outdoor / Plein Air" summary="Outdoor work made from direct observation of landscape, weather, and place." entries={pleinAir} />
+  <GallerySection title="Random" summary="Digital experiments and loose visual studies." entries={random} />
+  <GallerySection title="Figures" summary="Graphite studies of faces, figures, and character references." entries={figures} />
 </BaseLayout>

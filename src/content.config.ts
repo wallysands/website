@@ -4,11 +4,12 @@ const art = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    category: z.enum(["still-life", "outdoor-plein-air"]),
+    category: z.enum(["still-life", "outdoor-plein-air", "random", "figures"]),
     year: z.number().optional(),
     medium: z.string().optional(),
     image: z.string().optional(),
     fullImage: z.string().optional(),
+    video: z.string().optional(),
     order: z.number().optional(),
     status: z.enum(["planned", "available"]),
     description: z.string().optional(),

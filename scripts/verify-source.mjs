@@ -10,19 +10,36 @@ const expectedArtAssets = [
   "public/art/stilllife/beach-gear.jpg",
   "public/art/stilllife/bowl_fruit_brushes.jpg",
   "public/art/stilllife/cabinet.jpg",
+  "public/art/stilllife/desk.png",
   "public/art/stilllife/light_on_oils_and_bagel.jpg",
   "public/art/outdoor/backyard.jpg",
   "public/art/outdoor/backyard2.jpg",
   "public/art/outdoor/path.jpg",
+  "public/art/random/beanstalk.png",
+  "public/art/figures/gandalf.jpg",
+  "public/art/figures/mugshot.jpg",
+  "public/art/figures/mugshot2.jpg",
+  "public/art/figures/rembrandt.jpg",
+  "public/art/figures/selfportait.jpg",
 ];
 const expectedFullArtAssets = [
   "public/art/full/stilllife/beach-gear.jpg",
   "public/art/full/stilllife/bowl_fruit_brushes.jpg",
   "public/art/full/stilllife/cabinet.jpg",
+  "public/art/full/stilllife/desk.png",
   "public/art/full/stilllife/light_on_oils_and_bagel.jpg",
   "public/art/full/outdoor/backyard.jpg",
   "public/art/full/outdoor/backyard2.jpg",
   "public/art/full/outdoor/path.jpg",
+  "public/art/full/random/beanstalk.png",
+  "public/art/full/figures/gandalf.jpg",
+  "public/art/full/figures/mugshot.jpg",
+  "public/art/full/figures/mugshot2.jpg",
+  "public/art/full/figures/rembrandt.jpg",
+  "public/art/full/figures/selfportait.jpg",
+];
+const expectedArtVideos = [
+  "public/art/random/beanstalk.mp4",
 ];
 const expectedPublicationAssets = [
   "public/publications/drawing-in-the-flow-teaser.png",
@@ -190,7 +207,7 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
     if (!existsSync(join(workspaceRoot, contentFile))) failures.push(`Missing ${contentFile}`);
   }
 
-  for (const requiredText of ["Still Lifes", "Outdoor / Plein Air", "Selected projects", "Jello Jump", "squash and stretch", "Affine transformation sketches"]) {
+  for (const requiredText of ["Still Lifes", "Outdoor / Plein Air", "Random", "Figures", "Selected projects", "Jello Jump", "squash and stretch", "Affine transformation sketches"]) {
     if (!allText.includes(requiredText)) failures.push(`Missing content phrase: ${requiredText}`);
   }
 
@@ -208,6 +225,10 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
         failures.push(`Full-resolution art asset has non-normal EXIF orientation ${orientation}: ${asset}`);
       }
     }
+  }
+
+  for (const asset of expectedArtVideos) {
+    if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing art video asset: ${asset}`);
   }
 
   for (const asset of expectedPublicationAssets) {
@@ -238,8 +259,14 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
 
   const artContentText = artContentFiles.map((file) => readFileSync(join(artContentDir, file), "utf8")).join("\n");
   if (!artContentText.includes('medium: "Charcoal"')) failures.push("Missing Charcoal medium in art content");
+  if (!artContentText.includes('medium: "3D Digital"')) failures.push("Missing 3D Digital medium in art content");
+  if (!artContentText.includes('medium: "Graphite pencil"')) failures.push("Missing Graphite pencil medium in art content");
   if ((artContentText.match(/fullImage:/g) ?? []).length !== expectedFullArtAssets.length) failures.push("Every art entry must include a fullImage field");
   if (!artContentText.includes('title: "Beach Gear"')) failures.push("Missing Beach Gear art title");
+  if (!artContentText.includes('title: "Desk"')) failures.push("Missing Desk art title");
+  if (!artContentText.includes('title: "Beanstalk"')) failures.push("Missing Beanstalk art title");
+  if (!artContentText.includes('title: "Gandalf"')) failures.push("Missing Gandalf art title");
+  if (!artContentText.includes('video: "/art/random/beanstalk.mp4"')) failures.push("Missing Beanstalk video in art content");
   if (artContentText.includes("Beach Stuff") || artContentText.includes("beachstuff")) failures.push("Art content still references Beach Stuff");
   if (artContentText.includes('status: "planned"')) failures.push("Art content still includes planned placeholder status");
 
