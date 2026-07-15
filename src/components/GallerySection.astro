@@ -8,6 +8,7 @@ interface GalleryEntry {
     year?: number;
     medium?: string;
     image?: string;
+    fullImage?: string;
     status: string;
     category: string;
     description?: string;
@@ -33,6 +34,7 @@ const sectionId = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-
     {
       entries.map((entry) => {
         const image = entry.data.image ? withBase(entry.data.image) : "";
+        const fullImage = entry.data.fullImage ? withBase(entry.data.fullImage) : image;
         const detailId = `art-${entry.id.replace(/[^a-z0-9-]/gi, "-")}`;
         const meta = [entry.data.year, entry.data.medium].filter(Boolean).join(" · ");
         const alt = [entry.data.title, entry.data.year, entry.data.medium].filter(Boolean).join(", ");
@@ -47,7 +49,7 @@ const sectionId = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-
                 <div id={detailId} class="art-lightbox" aria-label={entry.data.title}>
                   <a class="art-lightbox-backdrop" href={`#${sectionId}`} aria-label="Close enlarged artwork"></a>
                   <figure>
-                    <img src={image} alt={alt} />
+                    <img src={fullImage} alt={alt} />
                     <figcaption>
                       <strong>{entry.data.title}</strong>
                       {meta && <span>{meta}</span>}

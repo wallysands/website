@@ -79,6 +79,15 @@ const requiredArtImages = [
   "/website/art/outdoor/backyard2.jpg",
   "/website/art/outdoor/path.jpg",
 ];
+const requiredFullArtImages = [
+  "/website/art/full/stilllife/beach-gear.jpg",
+  "/website/art/full/stilllife/bowl_fruit_brushes.jpg",
+  "/website/art/full/stilllife/cabinet.jpg",
+  "/website/art/full/stilllife/light_on_oils_and_bagel.jpg",
+  "/website/art/full/outdoor/backyard.jpg",
+  "/website/art/full/outdoor/backyard2.jpg",
+  "/website/art/full/outdoor/path.jpg",
+];
 
 function collectFiles(dir) {
   if (!existsSync(dir)) return [];
@@ -142,6 +151,9 @@ function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
       const artHtml = readFileSync(artHtmlPath, "utf8");
       for (const image of requiredArtImages) {
         if (!artHtml.includes(image)) failures.push(`Missing art image in dist: ${image}`);
+      }
+      for (const image of requiredFullArtImages) {
+        if (!artHtml.includes(image)) failures.push(`Missing full-resolution art image in dist: ${image}`);
       }
       if (artHtml.includes("Images to be added")) failures.push("Art page still includes placeholder copy");
       if (artHtml.includes("Beach Stuff") || artHtml.includes("beachstuff")) failures.push("Art page still references Beach Stuff");

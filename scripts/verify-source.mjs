@@ -15,6 +15,15 @@ const expectedArtAssets = [
   "public/art/outdoor/backyard2.jpg",
   "public/art/outdoor/path.jpg",
 ];
+const expectedFullArtAssets = [
+  "public/art/full/stilllife/beach-gear.jpg",
+  "public/art/full/stilllife/bowl_fruit_brushes.jpg",
+  "public/art/full/stilllife/cabinet.jpg",
+  "public/art/full/stilllife/light_on_oils_and_bagel.jpg",
+  "public/art/full/outdoor/backyard.jpg",
+  "public/art/full/outdoor/backyard2.jpg",
+  "public/art/full/outdoor/path.jpg",
+];
 
 function literalFromCodes(codes) {
   return String.fromCharCode(...codes);
@@ -130,6 +139,10 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
     if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing art asset: ${asset}`);
   }
 
+  for (const asset of expectedFullArtAssets) {
+    if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing full-resolution art asset: ${asset}`);
+  }
+
   const artContentDir = join(workspaceRoot, "src/content/art");
   const artContentFiles = existsSync(artContentDir) ? readdirSync(artContentDir).filter((file) => file.endsWith(".md")) : [];
   if (artContentFiles.length !== expectedArtAssets.length) {
@@ -138,6 +151,7 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
 
   const artContentText = artContentFiles.map((file) => readFileSync(join(artContentDir, file), "utf8")).join("\n");
   if (!artContentText.includes('medium: "Charcoal"')) failures.push("Missing Charcoal medium in art content");
+  if ((artContentText.match(/fullImage:/g) ?? []).length !== expectedFullArtAssets.length) failures.push("Every art entry must include a fullImage field");
   if (!artContentText.includes('title: "Beach Gear"')) failures.push("Missing Beach Gear art title");
   if (artContentText.includes("Beach Stuff") || artContentText.includes("beachstuff")) failures.push("Art content still references Beach Stuff");
   if (artContentText.includes('status: "planned"')) failures.push("Art content still includes planned placeholder status");
