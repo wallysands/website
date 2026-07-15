@@ -55,12 +55,12 @@ const rootInternalHrefPattern = new RegExp(`href="/(?!(?:${escapedLiteral(baseWi
 const requiredTextByPage = {
   "index.html": ["Walter Sands", "Experience", "Art", "Projects", "About", "LinkedIn"],
   "experience/index.html": ["Drawing in the Flow", "Interactive Visualization Lab"],
-  "art/index.html": ["Still Lifes", "Outdoor / Plein Air", "Charcoal", "gallery-masonry", "art-lightbox"],
+  "art/index.html": ["Still Lifes", "Outdoor / Plein Air", "Charcoal", "Beach Gear", "gallery-masonry", "art-lightbox"],
   "projects/index.html": ["Selected Projects"],
   "projects/selected-projects/index.html": ["Selected Projects", "intentionally ready"],
 };
 const requiredArtImages = [
-  "/website/art/stilllife/beachstuff.jpg",
+  "/website/art/stilllife/beach-gear.jpg",
   "/website/art/stilllife/bowl_fruit_brushes.jpg",
   "/website/art/stilllife/cabinet.jpg",
   "/website/art/stilllife/light_on_oils_and_bagel.jpg",
@@ -133,6 +133,7 @@ function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
         if (!artHtml.includes(image)) failures.push(`Missing art image in dist: ${image}`);
       }
       if (artHtml.includes("Images to be added")) failures.push("Art page still includes placeholder copy");
+      if (artHtml.includes("Beach Stuff") || artHtml.includes("beachstuff")) failures.push("Art page still references Beach Stuff");
     }
   }
   return { failures, files };

@@ -7,7 +7,7 @@ const root = process.cwd();
 const requiredLinkedIn = "https://www.linkedin.com/in/walter-sands-b200048b/";
 const textFilePattern = /\.(astro|css|csv|html|js|json|md|mjs|svg|ts|tsx|txt|webmanifest|xml|yml|yaml)$/i;
 const expectedArtAssets = [
-  "public/art/stilllife/beachstuff.jpg",
+  "public/art/stilllife/beach-gear.jpg",
   "public/art/stilllife/bowl_fruit_brushes.jpg",
   "public/art/stilllife/cabinet.jpg",
   "public/art/stilllife/light_on_oils_and_bagel.jpg",
@@ -138,6 +138,8 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
 
   const artContentText = artContentFiles.map((file) => readFileSync(join(artContentDir, file), "utf8")).join("\n");
   if (!artContentText.includes('medium: "Charcoal"')) failures.push("Missing Charcoal medium in art content");
+  if (!artContentText.includes('title: "Beach Gear"')) failures.push("Missing Beach Gear art title");
+  if (artContentText.includes("Beach Stuff") || artContentText.includes("beachstuff")) failures.push("Art content still references Beach Stuff");
   if (artContentText.includes('status: "planned"')) failures.push("Art content still includes planned placeholder status");
 
   return { failures, files };
