@@ -1,5 +1,8 @@
 ---
+import { withBase } from "../lib/urls";
+
 interface GalleryEntry {
+  id: string;
   data: {
     title: string;
     year?: number;
@@ -18,33 +21,52 @@ interface Props {
 }
 
 const { title, summary, entries } = Astro.props;
+const sectionId = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 ---
 
-<section class="section gallery-section">
+<section id={sectionId} class="section gallery-section">
   <div class="section-heading">
     <h2>{title}</h2>
     <p>{summary}</p>
   </div>
-  <div class="gallery-grid">
+  <div class="gallery-masonry">
     {
-      entries.map((entry) => (
-        <article class="gallery-item">
-          {entry.data.status === "available" && entry.data.image ? (
-            <img
-              class="art-image"
-              src={entry.data.image}
-              alt={[entry.data.title, entry.data.year, entry.data.medium].filter(Boolean).join(", ")}
-            />
-          ) : (
-            <div class="art-frame" aria-hidden="true"></div>
-          )}
-          <div>
-            <h3>{entry.data.title}</h3>
-            <p>{entry.data.description}</p>
-            <span>{entry.data.status === "planned" ? "Images to be added" : [entry.data.year, entry.data.medium].filter(Boolean).join(" · ")}</span>
-          </div>
-        </article>
-      ))
+      entries.map((entry) => {
+        const image = entry.data.image ? withBase(entry.data.image) : "";
+        const detailId = `art-${entry.id.replace(/[^a-z0-9-]/gi, "-")}`;
+        const meta = [entry.data.year, entry.data.medium].filter(Boolean).join(" · ");
+        const alt = [entry.data.title, entry.data.year, entry.data.medium].filter(Boolean).join(", ");
+
+        return (
+          <article class="gallery-item">
+            {entry.data.status === "available" && entry.data.image ? (
+              <>
+                <a class="art-image-link" href={`#${detailId}`} aria-label={`View ${entry.data.title} larger`}>
+                  <img class="art-image" src={image} alt={alt} loading="lazy" />
+                </a>
+                <div id={detailId} class="art-lightbox" aria-label={entry.data.title}>
+                  <a class="art-lightbox-backdrop" href={`#${sectionId}`} aria-label="Close enlarged artwork"></a>
+                  <figure>
+                    <img src={image} alt={alt} />
+                    <figcaption>
+                      <strong>{entry.data.title}</strong>
+                      {meta && <span>{meta}</span>}
+                    </figcaption>
+                    <a class="art-lightbox-close" href={`#${sectionId}`} aria-label="Close enlarged artwork">Close</a>
+                  </figure>
+                </div>
+              </>
+            ) : (
+              <div class="art-frame" aria-hidden="true"></div>
+            )}
+            <div class="gallery-caption">
+              <h3>{entry.data.title}</h3>
+              <p>{entry.data.description}</p>
+              <span>{entry.data.status === "planned" ? "Images to be added" : meta}</span>
+            </div>
+          </article>
+        );
+      })
     }
   </div>
 </section>

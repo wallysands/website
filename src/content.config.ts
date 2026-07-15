@@ -8,6 +8,7 @@ const art = defineCollection({
     year: z.number().optional(),
     medium: z.string().optional(),
     image: z.string().optional(),
+    order: z.number().optional(),
     status: z.enum(["planned", "available"]),
     description: z.string().optional(),
   }),

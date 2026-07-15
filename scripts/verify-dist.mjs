@@ -55,10 +55,19 @@ const rootInternalHrefPattern = new RegExp(`href="/(?!(?:${escapedLiteral(baseWi
 const requiredTextByPage = {
   "index.html": ["Walter Sands", "Experience", "Art", "Projects", "About", "LinkedIn"],
   "experience/index.html": ["Drawing in the Flow", "Interactive Visualization Lab"],
-  "art/index.html": ["Still Lifes", "Outdoor / Plein Air"],
+  "art/index.html": ["Still Lifes", "Outdoor / Plein Air", "Charcoal", "gallery-masonry", "art-lightbox"],
   "projects/index.html": ["Selected Projects"],
   "projects/selected-projects/index.html": ["Selected Projects", "intentionally ready"],
 };
+const requiredArtImages = [
+  "/website/art/stilllife/beachstuff.jpg",
+  "/website/art/stilllife/bowl_fruit_brushes.jpg",
+  "/website/art/stilllife/cabinet.jpg",
+  "/website/art/stilllife/light_on_oils_and_bagel.jpg",
+  "/website/art/outdoor/backyard.jpg",
+  "/website/art/outdoor/backyard2.jpg",
+  "/website/art/outdoor/path.jpg",
+];
 
 function collectFiles(dir) {
   if (!existsSync(dir)) return [];
@@ -116,6 +125,14 @@ function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
       for (const text of requiredText) {
         if (!pageText.includes(text)) failures.push(`Missing required text in ${page}: ${text}`);
       }
+    }
+    const artHtmlPath = join(dist, "art/index.html");
+    if (existsSync(artHtmlPath)) {
+      const artHtml = readFileSync(artHtmlPath, "utf8");
+      for (const image of requiredArtImages) {
+        if (!artHtml.includes(image)) failures.push(`Missing art image in dist: ${image}`);
+      }
+      if (artHtml.includes("Images to be added")) failures.push("Art page still includes placeholder copy");
     }
   }
   return { failures, files };

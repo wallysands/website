@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
@@ -6,6 +6,15 @@ import { join, relative } from "node:path";
 const root = process.cwd();
 const requiredLinkedIn = "https://www.linkedin.com/in/walter-sands-b200048b/";
 const textFilePattern = /\.(astro|css|csv|html|js|json|md|mjs|svg|ts|tsx|txt|webmanifest|xml|yml|yaml)$/i;
+const expectedArtAssets = [
+  "public/art/stilllife/beachstuff.jpg",
+  "public/art/stilllife/bowl_fruit_brushes.jpg",
+  "public/art/stilllife/cabinet.jpg",
+  "public/art/stilllife/light_on_oils_and_bagel.jpg",
+  "public/art/outdoor/backyard.jpg",
+  "public/art/outdoor/backyard2.jpg",
+  "public/art/outdoor/path.jpg",
+];
 
 function literalFromCodes(codes) {
   return String.fromCharCode(...codes);
@@ -74,7 +83,8 @@ function findForbiddenFailures(text, suffix = "") {
 
 function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot), checkStructure = true } = {}) {
   const failures = [];
-  const allText = files.map((file) => readFileSync(file, "utf8")).join("\n");
+  const existingFiles = files.filter((file) => existsSync(file));
+  const allText = existingFiles.map((file) => readFileSync(file, "utf8")).join("\n");
   failures.push(...findForbiddenFailures(allText));
 
   if (!checkStructure) return { failures, files };
@@ -105,8 +115,6 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
 
   const contentFiles = [
     "src/content.config.ts",
-    "src/content/art/still-lifes.md",
-    "src/content/art/outdoor-plein-air.md",
     "src/content/projects/selected-projects.md",
     "src/components/GallerySection.astro",
   ];
@@ -117,6 +125,20 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
   for (const requiredText of ["Still Lifes", "Outdoor / Plein Air", "selected projects"]) {
     if (!allText.includes(requiredText)) failures.push(`Missing content phrase: ${requiredText}`);
   }
+
+  for (const asset of expectedArtAssets) {
+    if (!existsSync(join(workspaceRoot, asset))) failures.push(`Missing art asset: ${asset}`);
+  }
+
+  const artContentDir = join(workspaceRoot, "src/content/art");
+  const artContentFiles = existsSync(artContentDir) ? readdirSync(artContentDir).filter((file) => file.endsWith(".md")) : [];
+  if (artContentFiles.length !== expectedArtAssets.length) {
+    failures.push(`Expected ${expectedArtAssets.length} art content entries, found ${artContentFiles.length}`);
+  }
+
+  const artContentText = artContentFiles.map((file) => readFileSync(join(artContentDir, file), "utf8")).join("\n");
+  if (!artContentText.includes('medium: "Charcoal"')) failures.push("Missing Charcoal medium in art content");
+  if (artContentText.includes('status: "planned"')) failures.push("Art content still includes planned placeholder status");
 
   return { failures, files };
 }

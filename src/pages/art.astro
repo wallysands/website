@@ -1,19 +1,21 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import GallerySection from "../components/GallerySection.astro";
 
 const artEntries = await getCollection("art");
-const stillLifes = artEntries.filter((entry) => entry.data.category === "still-life");
-const pleinAir = artEntries.filter((entry) => entry.data.category === "outdoor-plein-air");
+const byOrder = (a: CollectionEntry<"art">, b: CollectionEntry<"art">) =>
+  (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title);
+const stillLifes = artEntries.filter((entry) => entry.data.category === "still-life").sort(byOrder);
+const pleinAir = artEntries.filter((entry) => entry.data.category === "outdoor-plein-air").sort(byOrder);
 ---
 
 <BaseLayout title="Art | Walter Sands">
   <PageHeader
     eyebrow="Art"
     title="Still lifes and outdoor painting."
-    intro="A quiet gallery structure for observational work. Images will be added as collections are selected."
+    intro="Charcoal studies from still life arrangements and outdoor observation."
   />
   <GallerySection title="Still Lifes" summary="Paintings and studies built around close looking, arrangement, and light." entries={stillLifes} />
   <GallerySection title="Outdoor / Plein Air" summary="Outdoor work made from direct observation of landscape, weather, and place." entries={pleinAir} />

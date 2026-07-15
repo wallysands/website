@@ -172,20 +172,21 @@ p {
   margin: 0;
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+.gallery-masonry {
+  column-count: 2;
+  column-gap: 18px;
 }
 
 .gallery-item {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 18px;
-  padding: 18px;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 18px;
+  overflow: hidden;
   border: 1px solid var(--line);
   background: var(--panel);
   border-radius: 8px;
+  box-shadow: var(--shadow);
+  break-inside: avoid;
 }
 
 .art-frame {
@@ -196,18 +197,95 @@ p {
   border: 1px solid var(--line);
 }
 
+.art-image-link {
+  display: block;
+  background: #111;
+}
+
 .art-image {
+  display: block;
   width: 100%;
-  min-height: 150px;
-  height: 100%;
-  object-fit: cover;
-  border: 1px solid var(--line);
+  height: auto;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.art-image-link:hover .art-image {
+  opacity: 0.9;
+  transform: scale(1.01);
+}
+
+.gallery-caption {
+  padding: 16px 18px 18px;
+}
+
+.gallery-caption p {
+  margin: 8px 0;
 }
 
 .gallery-item span {
   color: var(--warm);
   font-weight: 700;
   font-size: 0.85rem;
+}
+
+.art-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.art-lightbox:target {
+  display: flex;
+}
+
+.art-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(35, 32, 29, 0.86);
+}
+
+.art-lightbox figure {
+  position: relative;
+  z-index: 1;
+  width: min(1040px, 100%);
+  margin: 0;
+}
+
+.art-lightbox img {
+  display: block;
+  width: 100%;
+  max-height: 82vh;
+  object-fit: contain;
+  background: #111;
+  border: 1px solid rgba(248, 246, 241, 0.24);
+}
+
+.art-lightbox figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 0 0;
+  color: var(--paper);
+}
+
+.art-lightbox figcaption span {
+  color: rgba(248, 246, 241, 0.72);
+}
+
+.art-lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 8px 12px;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
 }
 
 @media (max-width: 760px) {
@@ -233,9 +311,17 @@ p {
     flex-direction: column;
   }
 
-  .gallery-grid,
-  .gallery-item {
-    grid-template-columns: 1fr;
+  .gallery-masonry {
+    column-count: 1;
+  }
+
+  .art-lightbox {
+    padding: 16px;
+  }
+
+  .art-lightbox figcaption {
+    flex-direction: column;
+    gap: 2px;
   }
 }
 
