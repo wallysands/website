@@ -75,7 +75,7 @@ const requiredTextByPage = {
     "Figures",
     'href="#still-lifes"',
     'href="#outdoor-plein-air"',
-    'href="#digital-studies"',
+    'href="#miscellaneous"',
     'href="#figures"',
     "Charcoal",
     "Acrylic painted model",
