@@ -5,6 +5,6 @@ status: "available"
 medium: "Charcoal"
 image: "/art/stilllife/entryway.jpg"
 fullImage: "/art/full/stilllife/entryway.jpg"
-description: "Still life charcoal study."
+description: ""
 order: 70
 ---

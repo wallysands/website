@@ -5,6 +5,6 @@ status: "available"
 medium: "Charcoal"
 image: "/art/outdoor/path.jpg"
 fullImage: "/art/full/outdoor/path.jpg"
-description: "Outdoor charcoal study."
+description: ""
 order: 30
 ---

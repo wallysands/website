@@ -6,6 +6,6 @@ medium: "3D Digital"
 image: "/art/random/beanstalk.png"
 fullImage: "/art/full/random/beanstalk.png"
 video: "/art/random/beanstalk.mp4"
-description: "3D digital scene and motion study."
+description: ""
 order: 10
 ---

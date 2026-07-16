@@ -5,6 +5,6 @@ status: "available"
 medium: "Charcoal"
 image: "/art/figures/man_in_chair.jpg"
 fullImage: "/art/full/figures/man_in_chair.jpg"
-description: "Charcoal figure study."
+description: ""
 order: 60
 ---
