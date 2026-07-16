@@ -16,17 +16,17 @@ const figures = artEntries.filter((entry) => entry.data.category === "figures").
 <BaseLayout title="Art | Walter Sands">
   <PageHeader
     eyebrow="Art"
-    title="Artistic Studies"
+    title="Art studies from observation and imagination."
     intro="Charcoal, graphite pencil, and 3D digital studies from observation, reference, and imagination."
   />
   <nav class="section-jump-nav" aria-label="Art sections">
     <a href="#still-lifes">Still Lifes</a>
     <a href="#outdoor-plein-air">Outdoor / Plein Air</a>
-    <a href="#random">Random</a>
+    <a href="#digital-studies">Digital Studies</a>
     <a href="#figures">Figures</a>
   </nav>
-  <GallerySection title="Still Lifes" summary="Paintings and studies built around close looking, arrangement, and light." entries={stillLifes} />
+  <GallerySection title="Still Lifes" summary="Still life studies built around close looking, arrangement, and light." entries={stillLifes} />
   <GallerySection title="Outdoor / Plein Air" summary="Outdoor work made from direct observation of landscape, weather, and place." entries={pleinAir} />
-  <GallerySection title="Random" summary="Digital experiments and loose visual studies." entries={random} />
+  <GallerySection title="Digital Studies" summary="Digital scene experiments and loose visual studies." entries={random} />
   <GallerySection title="Figures" summary="Graphite studies of faces, figures, and character references." entries={figures} />
 </BaseLayout>

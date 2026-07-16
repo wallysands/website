@@ -10,36 +10,47 @@ const expectedArtAssets = [
   "public/art/stilllife/beach-gear.jpg",
   "public/art/stilllife/bowl_fruit_brushes.jpg",
   "public/art/stilllife/cabinet.jpg",
+  "public/art/stilllife/cooking.jpg",
   "public/art/stilllife/desk.png",
+  "public/art/stilllife/entryway.jpg",
   "public/art/stilllife/light_on_oils_and_bagel.jpg",
   "public/art/outdoor/backyard.jpg",
   "public/art/outdoor/backyard2.jpg",
   "public/art/outdoor/path.jpg",
   "public/art/random/beanstalk.png",
+  "public/art/random/ogor.jpg",
   "public/art/figures/gandalf.jpg",
+  "public/art/figures/man_in_chair.jpg",
   "public/art/figures/mugshot.jpg",
   "public/art/figures/mugshot2.jpg",
   "public/art/figures/rembrandt.jpg",
   "public/art/figures/selfportait.jpg",
+  "public/art/figures/woman_in_chair.jpg",
 ];
 const expectedFullArtAssets = [
   "public/art/full/stilllife/beach-gear.jpg",
   "public/art/full/stilllife/bowl_fruit_brushes.jpg",
   "public/art/full/stilllife/cabinet.jpg",
+  "public/art/full/stilllife/cooking.jpg",
   "public/art/full/stilllife/desk.png",
+  "public/art/full/stilllife/entryway.jpg",
   "public/art/full/stilllife/light_on_oils_and_bagel.jpg",
   "public/art/full/outdoor/backyard.jpg",
   "public/art/full/outdoor/backyard2.jpg",
   "public/art/full/outdoor/path.jpg",
   "public/art/full/random/beanstalk.png",
+  "public/art/full/random/ogor.jpg",
   "public/art/full/figures/gandalf.jpg",
+  "public/art/full/figures/man_in_chair.jpg",
   "public/art/full/figures/mugshot.jpg",
   "public/art/full/figures/mugshot2.jpg",
   "public/art/full/figures/rembrandt.jpg",
   "public/art/full/figures/selfportait.jpg",
+  "public/art/full/figures/woman_in_chair.jpg",
 ];
 const expectedArtVideos = [
   "public/art/random/beanstalk.mp4",
+  "public/art/random/nurgle.mp4",
 ];
 const expectedPublicationAssets = [
   "public/publications/drawing-in-the-flow-teaser.png",
@@ -246,7 +257,7 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
   for (const requiredText of [
     "Still Lifes",
     "Outdoor / Plein Air",
-    "Random",
+    "Digital Studies",
     "Figures",
     "Selected projects",
     "Jello Jump",
@@ -294,20 +305,29 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
 
   const artContentDir = join(workspaceRoot, "src/content/art");
   const artContentFiles = existsSync(artContentDir) ? readdirSync(artContentDir).filter((file) => file.endsWith(".md")) : [];
-  if (artContentFiles.length !== expectedArtAssets.length) {
-    failures.push(`Expected ${expectedArtAssets.length} art content entries, found ${artContentFiles.length}`);
+  const expectedArtContentEntries = expectedArtAssets.length + 1;
+  if (artContentFiles.length !== expectedArtContentEntries) {
+    failures.push(`Expected ${expectedArtContentEntries} art content entries, found ${artContentFiles.length}`);
   }
 
   const artContentText = artContentFiles.map((file) => readFileSync(join(artContentDir, file), "utf8")).join("\n");
   if (!artContentText.includes('medium: "Charcoal"')) failures.push("Missing Charcoal medium in art content");
+  if (!artContentText.includes('medium: "Acrylic painted model"')) failures.push("Missing Acrylic painted model medium in art content");
   if (!artContentText.includes('medium: "3D Digital"')) failures.push("Missing 3D Digital medium in art content");
   if (!artContentText.includes('medium: "Graphite pencil"')) failures.push("Missing Graphite pencil medium in art content");
   if ((artContentText.match(/fullImage:/g) ?? []).length !== expectedFullArtAssets.length) failures.push("Every art entry must include a fullImage field");
   if (!artContentText.includes('title: "Beach Gear"')) failures.push("Missing Beach Gear art title");
   if (!artContentText.includes('title: "Desk"')) failures.push("Missing Desk art title");
   if (!artContentText.includes('title: "Beanstalk"')) failures.push("Missing Beanstalk art title");
+  if (!artContentText.includes('title: "Nurgle"')) failures.push("Missing Nurgle art title");
+  if (!artContentText.includes('title: "Ogor"')) failures.push("Missing Ogor art title");
+  if (!artContentText.includes('title: "Man in Chair"')) failures.push("Missing Man in Chair art title");
+  if (!artContentText.includes('title: "Woman in Chair"')) failures.push("Missing Woman in Chair art title");
+  if (!artContentText.includes('title: "Cooking"')) failures.push("Missing Cooking art title");
+  if (!artContentText.includes('title: "Entryway"')) failures.push("Missing Entryway art title");
   if (!artContentText.includes('title: "Gandalf"')) failures.push("Missing Gandalf art title");
   if (!artContentText.includes('video: "/art/random/beanstalk.mp4"')) failures.push("Missing Beanstalk video in art content");
+  if (!artContentText.includes('video: "/art/random/nurgle.mp4"')) failures.push("Missing Nurgle video in art content");
   if (artContentText.includes("Beach Stuff") || artContentText.includes("beachstuff")) failures.push("Art content still references Beach Stuff");
   if (artContentText.includes('status: "planned"')) failures.push("Art content still includes planned placeholder status");
 
