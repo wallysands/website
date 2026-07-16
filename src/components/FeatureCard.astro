@@ -6,13 +6,31 @@ interface Props {
   href: string;
   summary: string;
   meta?: string;
+  image?: {
+    src: string;
+  };
+  images?: {
+    src: string;
+  }[];
 }
 
-const { title, href, summary, meta } = Astro.props;
+const { title, href, summary, meta, image, images } = Astro.props;
+const cardImages = images?.length ? images : image ? [image] : [];
 ---
 
-<a class="feature-card" href={withBase(href)}>
-  {meta && <span>{meta}</span>}
-  <h2>{title}</h2>
-  <p>{summary}</p>
+<a class={`feature-card${cardImages.length > 0 ? " feature-card-with-image" : ""}`} href={withBase(href)}>
+  {
+    cardImages.length > 0 && (
+      <div class={`feature-card-media${cardImages.length > 1 ? " feature-card-collage" : ""}`} aria-hidden="true">
+        {cardImages.map((cardImage) => (
+          <img src={withBase(cardImage.src)} alt="" loading="lazy" />
+        ))}
+      </div>
+    )
+  }
+  <div class="feature-card-copy">
+    {meta && <span>{meta}</span>}
+    <h2>{title}</h2>
+    <p>{summary}</p>
+  </div>
 </a>

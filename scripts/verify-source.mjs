@@ -257,7 +257,7 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
   for (const requiredText of [
     "Still Lifes",
     "Outdoor / Plein Air",
-    "Digital Studies",
+    "Miscellaneous",
     "Figures",
     "Selected projects",
     "Jello Jump",
@@ -296,11 +296,31 @@ function verifySource(workspaceRoot, { files = trackedSourceFiles(workspaceRoot)
   }
 
   if (/notion\.com/i.test(publicSiteText)) failures.push("Project source must not link to Notion");
+  if (/The portfolio is structured to let those threads sit together:\s*careful systems\s*work, visual exploration, and direct observation\./.test(publicSiteText)) {
+    failures.push("About page still includes the removed portfolio structure sentence");
+  }
+  if (publicSiteText.includes("Digital Studies")) {
+    failures.push("Art page still uses Digital Studies instead of Miscellaneous");
+  }
   if (publicSiteText.includes("A tile map loaded from `maps/sample.txt`, with start and goal markers.")) {
     failures.push("Jello Jump page still includes the removed map bullet");
   }
   if (!publicSiteText.includes("max-width: 50%;")) {
     failures.push("Jello Jump affine figures should render at about half width on desktop");
+  }
+
+  const homePageFile = join(workspaceRoot, "src/pages/index.astro");
+  if (existsSync(homePageFile)) {
+    const homePageText = readFileSync(homePageFile, "utf8");
+    for (const image of [
+      "/publications/drawing-in-the-flow-teaser.png",
+      "/art/stilllife/desk.png",
+      "/art/outdoor/path.jpg",
+      "/art/figures/selfportait.jpg",
+      "/projects/tournament-searcher/graph-20.jpg",
+    ]) {
+      if (!homePageText.includes(image)) failures.push(`Missing homepage feature image: ${image}`);
+    }
   }
 
   const artContentDir = join(workspaceRoot, "src/content/art");

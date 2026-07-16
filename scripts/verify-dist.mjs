@@ -71,7 +71,7 @@ const requiredTextByPage = {
     "section-jump-nav",
     "Still Lifes",
     "Outdoor / Plein Air",
-    "Digital Studies",
+    "Miscellaneous",
     "Figures",
     'href="#still-lifes"',
     'href="#outdoor-plein-air"',
@@ -142,7 +142,11 @@ const requiredTextByPage = {
   ],
 };
 const forbiddenTextByPage = {
+  "about/index.html": [
+    "The portfolio is structured to let those threads sit together: careful systems work, visual exploration, and direct observation.",
+  ],
   "experience/index.html": ["Drawing in the Flow", "<h2>Skills</h2>", "skill-grid", "Used:"],
+  "art/index.html": ["Digital Studies"],
   "projects/index.html": ["notion.com"],
   "projects/jello-jump/index.html": ["notion.com", "A tile map loaded from", "jello-jump-walkthrough.mp4", "affine-vertical.png", "affine-diagonal.png", "affine-wall-impact.png"],
   "projects/ray-tracer/index.html": ["notion.com", "wsl.localhost", "raytraced.png"],
@@ -192,6 +196,13 @@ const requiredFullArtImages = [
 ];
 const requiredPublicationImages = [
   "/website/publications/drawing-in-the-flow-teaser.png",
+];
+const requiredHomeFeatureImages = [
+  "/website/publications/drawing-in-the-flow-teaser.png",
+  "/website/art/stilllife/desk.png",
+  "/website/art/outdoor/path.jpg",
+  "/website/art/figures/selfportait.jpg",
+  "/website/projects/tournament-searcher/graph-20.jpg",
 ];
 
 function collectFiles(dir) {
@@ -276,6 +287,13 @@ function verifyDist(workspaceRoot, { checkRequiredPages = true } = {}) {
       const publicationsHtml = readFileSync(publicationsHtmlPath, "utf8");
       for (const image of requiredPublicationImages) {
         if (!publicationsHtml.includes(image)) failures.push(`Missing publication image in dist: ${image}`);
+      }
+    }
+    const homeHtmlPath = join(dist, "index.html");
+    if (existsSync(homeHtmlPath)) {
+      const homeHtml = readFileSync(homeHtmlPath, "utf8");
+      for (const image of requiredHomeFeatureImages) {
+        if (!homeHtml.includes(image)) failures.push(`Missing homepage feature image in dist: ${image}`);
       }
     }
   }

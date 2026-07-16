@@ -15,9 +15,31 @@ import FeatureCard from "../components/FeatureCard.astro";
   </section>
 
   <section class="grid" aria-label="Portfolio sections">
-    <FeatureCard title="Experience" href="/experience/" meta="Research and practice" summary="PhD research, education, and industry roles in software and data systems." />
-    <FeatureCard title="Art" href="/art/" meta="Observational studies" summary="Still life, outdoor, figure, and digital studies from observation and imagination." />
-    <FeatureCard title="Projects" href="/projects/" meta="Selected work" summary="Graphics, interaction, visualization, and graph search project writeups." />
+    <FeatureCard
+      title="Experience"
+      href="/experience/"
+      meta="Research and practice"
+      summary="PhD research, education, and industry roles in software and data systems."
+      image={{ src: "/publications/drawing-in-the-flow-teaser.png" }}
+    />
+    <FeatureCard
+      title="Art"
+      href="/art/"
+      meta="Observational studies"
+      summary="Still life, outdoor, figure, and digital studies from observation and imagination."
+      images={[
+        { src: "/art/stilllife/desk.png" },
+        { src: "/art/outdoor/path.jpg" },
+        { src: "/art/figures/selfportait.jpg" },
+      ]}
+    />
+    <FeatureCard
+      title="Projects"
+      href="/projects/"
+      meta="Selected work"
+      summary="Graphics, interaction, visualization, and graph search project writeups."
+      image={{ src: "/projects/tournament-searcher/graph-20.jpg" }}
+    />
   </section>
 
   <section class="section current-focus">
