@@ -22,11 +22,11 @@ const figures = artEntries.filter((entry) => entry.data.category === "figures").
   <nav class="section-jump-nav" aria-label="Art sections">
     <a href="#still-lifes">Still Lifes</a>
     <a href="#outdoor-plein-air">Outdoor / Plein Air</a>
-    <a href="#miscellaneous">Miscellaneous</a>
     <a href="#figures">Figures</a>
+    <a href="#miscellaneous">Miscellaneous</a>
   </nav>
   <GallerySection title="Still Lifes" summary="Still life studies built around close looking, arrangement, and light." entries={stillLifes} />
   <GallerySection title="Outdoor / Plein Air" summary="Outdoor work made from direct observation of landscape, weather, and place." entries={pleinAir} />
-  <GallerySection title="Miscellaneous" summary="Digital scene experiments and loose visual studies." entries={random} />
   <GallerySection title="Figures" summary="Graphite studies of faces, figures, and character references." entries={figures} />
+  <GallerySection title="Miscellaneous" summary="Digital scene experiments and loose visual studies." entries={random} />
 </BaseLayout>
